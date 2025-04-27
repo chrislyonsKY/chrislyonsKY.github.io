@@ -1,6 +1,6 @@
-# William C. Lyons - Professional Resume
+# Chris Lyons - Professional Resume
 
-This repository contains the GitHub Pages deployment of William C. Lyons' professional resume.
+This repository contains the GitHub Pages deployment of Chris Lyons' professional resume.
 
 ## Live Site
 
