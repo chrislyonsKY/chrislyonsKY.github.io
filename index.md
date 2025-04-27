@@ -1,4 +1,4 @@
-# William Christopher Lyons
+# Chris Lyons
 [wchris.lyons@gmail.com](mailto:wchris.lyons@gmail.com) | (859) 398-3340  
 [LinkedIn](https://www.linkedin.com/in/williamclyons) | [GitHub](https://github.com/chrislyonsKY)
 
