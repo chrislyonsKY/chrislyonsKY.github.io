@@ -1,6 +1,9 @@
-# chrislyonsKY.github.io
-
-Personal portfolio and resume site for Chris Lyons, showcasing GIS development expertise, spatial automation projects, and professional experience.
+<p align="center">
+  <h1 align="center">chrislyonsKY.github.io</h1>
+  <p align="center">
+    <strong>Personal portfolio and resume site for Chris Lyons, showcasing GIS development expertise, spatial automation projects, and professional experience.</strong>
+  </p>
+</p>
 
 🌐 **Live Site:** [chrislyonsKY.github.io](https://chrislyonsky.github.io)
 
@@ -25,8 +28,8 @@ The portfolio is built as a single-page resume site with the following sections:
 4. **Featured Projects**: Highlighted work including:
    - Null Island Dispatch newsletter
    - Automated geospatial workflows
-   - The Meridian news synthesis platform
-   - GaitPainter iOS application
+   - Meridian news synthesis platform
+   - Lost Signal web based FPS
 5. **Education & Certifications**: Academic background
 
 ## Technology Stack
@@ -95,11 +98,13 @@ Weekly newsletter exploring GeoAI and LLM applications in geospatial workflows. 
 ### Enterprise GIS Automation
 Production-ready suite of ArcPy scripts for spatial data processing, geodatabase management, and FGDC-compliant metadata generation used in Kentucky's environmental regulatory workflows.
 
-### The Meridian
-Full-stack news synthesis platform using AI to generate neutral political summaries from multiple sources. Built with Next.js, Supabase, and custom LLM integration.
+### Meridian News
+The Meridian is a public-facing news platform that ingests articles from across the political spectrum, clusters them by story using AI, and produces neutral, fact-first summaries — showing where sources agree and where they diverge.
 
-### GaitPainter
-iOS application that transforms walking patterns into generative artwork and music using iPhone sensor data, exploring the creative potential of spatial movement data.
+### Lost Signal
+Browser-playable atmospheric sci-fi FPS built with Three.js, React, and authentic Half-Life 1 audio.
+
+                       
 
 ## Repository Maintenance
 
