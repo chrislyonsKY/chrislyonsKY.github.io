@@ -620,68 +620,10 @@
                 </div>
             </div>
         </section>
-
-        
         
         <section>
-            <h2>Featured Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <h4 class="project-title">Null Island Dispatch</h4>
-                    <p class="project-description">
-                        Newsletter publication exploring GeoAI, LLM applications in geospatial workflows, and the evolution of spatial technologies. Focuses on practical AI integration for GIS professionals.
-                    </p>
-                    <div class="project-tech">
-                        <span class="tech-badge">Content Strategy</span>
-                        <span class="tech-badge">GeoAI</span>
-                        <span class="tech-badge">Technical Writing</span>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <h4 class="project-title">Automated Geospatial Workflows</h4>
-                    <p class="project-description">
-                        Suite of ArcPy scripts automating spatial data processing, geodatabase management, and FGDC-compliant metadata generation for regulatory GIS workflows. 
-                    </p>
-                    <div class="project-tech">
-                        <span class="tech-badge">ArcPy</span>
-                        <span class="tech-badge">Python</span>
-                        <span class="tech-badge">Enterprise GDB</span>
-                        <span class="tech-badge">FGDC</span>
-                    </div>
-                </div>
-                
-                <div class="project-card">
-                    <h4 class="project-title">Meridian News</h4>
-                    <p class="project-description">
-                        The Meridian is a public-facing news platform that ingests articles from across the political spectrum, clusters them by story using AI, and produces neutral, fact-first summaries — showing where sources agree and where they diverge.
-                    </p>
-                    <div class="project-tech">
-                        <span class="tech-badge">TypeScript</span>
-                        <span class="tech-badge">React</span>
-                        <span class="tech-badge">Node.js</span>
-                        <span class="tech-badge">Express</span>
-                        <span class="tech-badge">PostgreSQL</span>
-                        <span class="tech-badge">Drizzle ORM</span>
-                        <span class="tech-badge">Vite</span>
-                        <span class="tech-badge">Tailwind CSS</span>
-                        <span class="tech-badge">Leaflet</span>
-                    </div>
-                </div>
-                
-                <div class="project-card">
-                    <h4 class="project-title">Lost Signal</h4>
-                    <p class="project-description">
-                        Browser-playable atmospheric sci-fi FPS built with Three.js, React, and authentic Half-Life 1 audio.
-                    </p>
-                    <div class="project-tech">
-                        <span class="tech-badge">Three.js</span>
-                        <span class="tech-badge">React</span>
-                        <span class="tech-badge">Vite</span>
-                        <span class="tech-badge">Zustand</span>
-                        <span class="tech-badge">Express</span>
-                    </div>
-                </div>
-            </div>
+          <h2>Featured Projects</h2>
+          <div id="projects-grid" class="projects-grid"></div>
         </section>
         
         <section>
@@ -701,5 +643,85 @@
             <p>© 2026 Chris Lyons • Built with care for the spatial web</p>
         </footer>
     </div>
+    <script>
+  (async function renderProjects() {
+    const username = "chrislyonsKY";
+    const perPage = 100;
+    const maxProjects = 6;
+
+    const grid = document.getElementById("projects-grid");
+    if (!grid) return;
+
+    // Loading state
+    grid.innerHTML = `
+      <div class="project-card">
+        <div class="project-title">Loading projects…</div>
+        <div class="project-description">Fetching latest public repositories from GitHub.</div>
+      </div>`;
+
+    try {
+      const url = `https://api.github.com/users/${encodeURIComponent(username)}/repos?per_page=${perPage}&sort=updated`;
+      const res = await fetch(url, { headers: { "Accept": "application/vnd.github+json" } });
+
+      if (!res.ok) throw new Error(`GitHub API error ${res.status}`);
+
+      const repos = await res.json();
+
+      const projects = repos
+        .filter(r =>
+          r &&
+          r.private === false &&
+          r.archived === false &&
+          r.fork === false
+        )
+        .filter(r => r.name !== `${username}.github.io`)
+        .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+        .slice(0, maxProjects);
+
+      if (projects.length === 0) {
+        grid.innerHTML = `
+          <div class="project-card">
+            <div class="project-title">No projects found</div>
+            <div class="project-description">No public, non-archived, non-fork repositories were returned.</div>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = "";
+
+      for (const r of projects) {
+        const card = document.createElement("div");
+        card.className = "project-card";
+        card.innerHTML = `
+          <div class="project-title">
+            <a href="${r.html_url}" target="_blank" rel="noopener noreferrer">${escapeHtml(r.name)}</a>
+          </div>
+          <div class="project-description">${escapeHtml(r.description || "No description provided.")}</div>
+          <div class="project-tech">
+            ${r.language ? `<span class="tech-badge">${escapeHtml(r.language)}</span>` : ""}
+            <span class="tech-badge">★ ${Number(r.stargazers_count || 0)}</span>
+            ${r.updated_at ? `<span class="tech-badge">Updated ${new Date(r.updated_at).toLocaleDateString()}</span>` : ""}
+          </div>
+        `;
+        grid.appendChild(card);
+      }
+    } catch (err) {
+      grid.innerHTML = `
+        <div class="project-card">
+          <div class="project-title">Couldn’t load projects</div>
+          <div class="project-description">${escapeHtml(String(err.message || err))}</div>
+        </div>`;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  })();
+</script>
 </body>
 </html>
