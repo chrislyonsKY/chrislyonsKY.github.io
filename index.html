@@ -3,1483 +3,409 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chris Lyons — GIS Analyst & Geospatial Developer</title>
-  <meta name="description" content="GIS Analyst III, spatial developer, and open-source geospatial tooling author. Python, R, .NET, TypeScript, and Rust packages for cloud-native spatial workflows.">
+  <title>Chris Lyons — Spatial Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --navy:        #0B1426;
-      --navy-light:  #111D33;
-      --navy-mid:    #162340;
-      --teal:        #14B8A6;
-      --teal-dim:    #0d8a7c;
-      --amber:       #F59E0B;
-      --rose:        #F43F5E;
-      --violet:      #8B5CF6;
-      --sky:         #0EA5E9;
-      --slate:       #64748B;
-      --slate-light: #94A3B8;
-      --white:       #F1F5F9;
-      --white-dim:   #CBD5E1;
-      --font-mono:   'JetBrains Mono', monospace;
-      --font-serif:  'Fraunces', serif;
-      --font-sans:   'DM Sans', sans-serif;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--navy);
-      color: var(--white);
-      font-family: var(--font-sans);
-      font-size: 16px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ─── GRID BACKGROUND ─────────────────────────────── */
-    .grid-bg {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      background-image:
-        linear-gradient(rgba(20,184,166,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(20,184,166,0.04) 1px, transparent 1px);
-      background-size: 60px 60px;
-    }
-
-    /* ─── NAV ─────────────────────────────────────────── */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(11,20,38,0.9);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(20,184,166,0.12);
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 56px;
-    }
-    .nav-brand {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--teal);
-      letter-spacing: 0.05em;
-      text-decoration: none;
-    }
-    .nav-brand span { color: var(--white-dim); font-weight: 400; }
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-      list-style: none;
-    }
-    .nav-links a {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--slate-light);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--teal); }
-    .nav-cta {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--navy);
-      background: var(--teal);
-      border: none;
-      padding: 0.45rem 1rem;
-      border-radius: 4px;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-    .nav-cta:hover { background: #10a394; }
-
-    /* ─── CONTAINER ───────────────────────────────────── */
-    .container {
-      position: relative;
-      z-index: 1;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-
-    /* ─── HEADER / HERO ───────────────────────────────── */
-    header {
-      position: relative;
-      z-index: 1;
-      padding: 5rem 2rem 4rem;
-      max-width: 900px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 3rem;
-      align-items: start;
-    }
-    .header-eyebrow {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    .header-eyebrow::before,
-    .header-eyebrow::after {
-      content: '';
-      display: block;
-      width: 2rem;
-      height: 1px;
-      background: var(--teal);
-      opacity: 0.6;
-    }
-    h1 {
-      font-family: var(--font-mono);
-      font-size: clamp(2.6rem, 7vw, 4.8rem);
-      font-weight: 700;
-      line-height: 1.0;
-      letter-spacing: -0.02em;
-      color: var(--white);
-      margin-bottom: 0.6rem;
-      position: relative;
-    }
-    h1 .name-first {
-      display: block;
-      color: var(--teal);
-      text-shadow: 0 0 40px rgba(20,184,166,0.35);
-    }
-    h1 .name-last {
-      display: block;
-      color: var(--white);
-      position: relative;
-    }
-    h1 .name-last::after {
-      content: '_';
-      color: var(--teal);
-      animation: blink 1.2s step-end infinite;
-      margin-left: 2px;
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-    .header-title {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 1.5rem;
-      opacity: 0.85;
-    }
-    .header-contact {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      padding-top: 1rem;
-    }
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      color: var(--slate-light);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .contact-item:hover { color: var(--teal); }
-    .contact-item .icon { font-size: 0.9rem; }
-
-    /* ─── SECTION ─────────────────────────────────────── */
-    section {
-      position: relative;
-      z-index: 1;
-      padding: 3.5rem 0;
-    }
-    .section-rule {
-      border: none;
-      border-top: 1px solid rgba(20,184,166,0.15);
-      margin-bottom: 3.5rem;
-    }
-    h2 {
-      font-family: var(--font-serif);
-      font-size: 1.75rem;
-      font-weight: 400;
-      color: var(--white);
-      margin-bottom: 0.5rem;
-    }
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      gap: 1rem;
-      margin-bottom: 2.5rem;
-    }
-    .section-tag {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--teal);
-      opacity: 0.8;
-    }
-
-    /* ─── SUMMARY ─────────────────────────────────────── */
-    .summary-block {
-      background: var(--navy-light);
-      border-left: 3px solid var(--teal);
-      border-radius: 0 8px 8px 0;
-      padding: 1.5rem 2rem;
-      color: var(--white-dim);
-      font-size: 0.95rem;
-      line-height: 1.7;
-    }
-
-    /* ─── EXPERIENCE ──────────────────────────────────── */
-    .experience-item {
-      background: var(--navy-light);
-      border: 1px solid rgba(20,184,166,0.1);
-      border-radius: 8px;
-      padding: 1.75rem;
-      margin-bottom: 1.25rem;
-    }
-    .job-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 0.5rem;
-      gap: 1rem;
-    }
-    .job-title {
-      font-family: var(--font-mono);
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--white);
-    }
-    .job-org {
-      font-family: var(--font-sans);
-      font-size: 0.85rem;
-      color: var(--teal);
-      margin-bottom: 0.25rem;
-    }
-    .job-dates {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--slate);
-      white-space: nowrap;
-    }
-    .job-bullets {
-      list-style: none;
-      margin-top: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-    .job-bullets li {
-      font-size: 0.875rem;
-      color: var(--white-dim);
-      padding-left: 1.25rem;
-      position: relative;
-    }
-    .job-bullets li::before {
-      content: '→';
-      position: absolute;
-      left: 0;
-      color: var(--teal);
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-    }
-
-    /* ─── SKILLS ──────────────────────────────────────── */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
-    }
-    .skill-category {
-      background: var(--navy-light);
-      border: 1px solid rgba(20,184,166,0.1);
-      border-radius: 8px;
-      padding: 1.25rem 1.5rem;
-    }
-    .skill-cat-title {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 0.85rem;
-    }
-    .skill-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-    .skill-tag {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--slate-light);
-      background: rgba(20,184,166,0.06);
-      border: 1px solid rgba(20,184,166,0.15);
-      border-radius: 4px;
-      padding: 0.2rem 0.55rem;
-    }
-
-    /* ─── OPEN SOURCE — PACKAGE CARDS ────────────────── */
-    .oss-intro {
-      font-size: 0.9rem;
-      color: var(--slate-light);
-      margin-bottom: 2.5rem;
-      max-width: 600px;
-    }
-    .oss-intro a {
-      color: var(--teal);
-      text-decoration: none;
-    }
-    .oss-intro a:hover { text-decoration: underline; }
-
-    .tier-group { margin-bottom: 3rem; }
-    .tier-label {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
-    }
-    .tier-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: rgba(255,255,255,0.06);
-    }
-
-    .pkg-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1px;
-      background: rgba(20,184,166,0.08);
-      border: 1px solid rgba(20,184,166,0.08);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .pkg-card {
-      background: var(--navy-light);
-      padding: 1.25rem 1.5rem;
-      border-left: 3px solid transparent;
-      text-decoration: none;
-      display: block;
-      transition: background 0.15s, border-color 0.15s;
-      position: relative;
-    }
-    .pkg-card:hover { background: var(--navy-mid); }
-
-    .pkg-card-top {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.6rem;
-    }
-    .pkg-name {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--white);
-    }
-    .pkg-badge {
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      padding: 0.15rem 0.4rem;
-      border-radius: 3px;
-      text-transform: uppercase;
-    }
-    .badge-py  { background: #3B4A6B; color: #93C5FD; }
-    .badge-r   { background: #3B2D6B; color: #C4B5FD; }
-    .badge-cs  { background: #6B3B5A; color: #F9A8D4; }
-    .badge-ts  { background: #1B4A6B; color: #7DD3FC; }
-    .badge-rs  { background: #4A3B1B; color: #FCD34D; }
-    .badge-qgis { background: #1B4A3B; color: #6EE7B7; }
-
-    .pkg-desc {
-      font-size: 0.8rem;
-      color: var(--slate-light);
-      line-height: 1.5;
-    }
-
-    /* tier accent colors on card left border */
-    .tier-discovery .pkg-card:hover  { border-left-color: #14B8A6; }
-    .tier-quality .pkg-card:hover    { border-left-color: #F43F5E; }
-    .tier-etl .pkg-card:hover        { border-left-color: #F59E0B; }
-    .tier-processing .pkg-card:hover { border-left-color: #8B5CF6; }
-    .tier-tools .pkg-card:hover      { border-left-color: #0EA5E9; }
-
-    .tier-discovery .tier-label { color: #14B8A6; }
-    .tier-quality   .tier-label { color: #F43F5E; }
-    .tier-etl       .tier-label { color: #F59E0B; }
-    .tier-processing .tier-label { color: #8B5CF6; }
-    .tier-tools     .tier-label { color: #0EA5E9; }
-
-    .oss-footer {
-      margin-top: 2rem;
-      text-align: center;
-    }
-    .btn-ghost {
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--teal);
-      border: 1px solid rgba(20,184,166,0.4);
-      background: transparent;
-      padding: 0.6rem 1.5rem;
-      border-radius: 4px;
-      text-decoration: none;
-      display: inline-block;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .btn-ghost:hover {
-      background: rgba(20,184,166,0.08);
-      border-color: var(--teal);
-    }
-
-    /* ─── SPOTLIGHT PROJECTS ─────────────────────────── */
-    .spotlight-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-    .spotlight-card {
-      background: var(--navy-light);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 10px;
-      overflow: hidden;
-      text-decoration: none;
-      display: grid;
-      grid-template-columns: 4px 1fr;
-      transition: border-color 0.2s, background 0.2s, transform 0.2s;
-      position: relative;
-    }
-    .spotlight-card:hover {
-      border-color: rgba(255,255,255,0.15);
-      background: var(--navy-mid);
-      transform: translateX(3px);
-    }
-    .spotlight-accent {
-      width: 4px;
-      background: var(--card-color, var(--teal));
-      flex-shrink: 0;
-      transition: width 0.2s;
-    }
-    .spotlight-card:hover .spotlight-accent {
-      width: 6px;
-    }
-    .spotlight-body {
-      padding: 1.75rem 2rem;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 1.5rem;
-      align-items: start;
-    }
-    .spotlight-main { min-width: 0; }
-    .spotlight-top {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 0.6rem;
-      flex-wrap: wrap;
-    }
-    .spotlight-name {
-      font-family: var(--font-mono);
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--white);
-    }
-    .spotlight-status {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      padding: 0.2rem 0.55rem;
-      border-radius: 3px;
-      background: rgba(20,184,166,0.12);
-      color: var(--teal);
-      border: 1px solid rgba(20,184,166,0.25);
-    }
-    .spotlight-status.active { color: #4ade80; background: rgba(74,222,128,0.1); border-color: rgba(74,222,128,0.25); }
-    .spotlight-status.dev    { color: var(--amber); background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.25); }
-    .spotlight-tagline {
-      font-size: 0.9rem;
-      color: var(--white-dim);
-      line-height: 1.6;
-      margin-bottom: 1.1rem;
-    }
-    .spotlight-stack {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-    .stack-tag {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      font-weight: 500;
-      padding: 0.2rem 0.55rem;
-      border-radius: 4px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.09);
-      color: var(--slate-light);
-    }
-    .spotlight-meta {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 0.5rem;
-      padding-top: 0.25rem;
-      flex-shrink: 0;
-    }
-    .spotlight-glyph {
-      font-family: var(--font-mono);
-      font-size: 2rem;
-      opacity: 0.18;
-      line-height: 1;
-      user-select: none;
-    }
-    .spotlight-link {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--card-color, var(--teal));
-      opacity: 0.7;
-      transition: opacity 0.2s;
-    }
-    .spotlight-card:hover .spotlight-link { opacity: 1; }
-
-    /* ─── EDUCATION ───────────────────────────────────── */
-    .education-item {
-      background: var(--navy-light);
-      border: 1px solid rgba(20,184,166,0.1);
-      border-radius: 8px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1rem;
-    }
-    .edu-degree {
-      font-family: var(--font-mono);
-      font-size: 0.875rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 0.2rem;
-    }
-    .edu-school {
-      font-size: 0.85rem;
-      color: var(--teal);
-      margin-bottom: 0.15rem;
-    }
-    .edu-year {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--slate);
-    }
-
-    /* ─── GITHUB REPOS ────────────────────────────────── */
-    .repos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1rem;
-    }
-    .repo-card {
-      background: var(--navy-light);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 8px;
-      padding: 1.2rem 1.4rem;
-      text-decoration: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .repo-card:hover {
-      border-color: rgba(20,184,166,0.3);
-      background: var(--navy-mid);
-    }
-    .repo-card-header {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .repo-icon {
-      font-size: 0.8rem;
-      opacity: 0.5;
-    }
-    .repo-name {
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--teal);
-    }
-    .repo-desc {
-      font-size: 0.78rem;
-      color: var(--slate-light);
-      line-height: 1.45;
-      flex: 1;
-    }
-    .repo-meta {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-top: 0.25rem;
-    }
-    .repo-lang {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      color: var(--slate-light);
-    }
-    .lang-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .lang-rust     { background: #dea584; }
-    .lang-python   { background: #3572A5; }
-    .lang-ts       { background: #3178c6; }
-    .lang-js       { background: #f1e05a; }
-    .lang-csharp   { background: #178600; }
-    .lang-r        { background: #198CE7; }
-    .lang-html     { background: #e34c26; }
-
-    .repo-updated {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--slate);
-      margin-left: auto;
-    }
-
-    /* ─── NOW BLOCK ──────────────────────────────────── */
-    .now-block {
-      margin-top: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-    }
-    .now-label {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--teal);
-      opacity: 0.7;
-    }
-    .now-item {
-      display: flex;
-      align-items: baseline;
-      gap: 0.6rem;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--slate-light);
-      line-height: 1.5;
-    }
-    .now-item::before {
-      content: '▸';
-      color: var(--teal);
-      font-size: 0.6rem;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-    .now-item a { color: var(--teal); text-decoration: none; }
-    .now-item a:hover { text-decoration: underline; }
-
-    /* ─── NEWSLETTER ──────────────────────────────────── */
-    .newsletter-card {
-      background: var(--navy-light);
-      border: 1px solid rgba(245,158,11,0.2);
-      border-radius: 10px;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 4px 1fr;
-    }
-    .newsletter-accent { background: var(--amber); }
-    .newsletter-body {
-      padding: 1.75rem 2rem;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 2rem;
-      align-items: center;
-    }
-    .newsletter-eyebrow {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin-bottom: 0.4rem;
-    }
-    .newsletter-title {
-      font-family: var(--font-mono);
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 0.5rem;
-    }
-    .newsletter-desc {
-      font-size: 0.875rem;
-      color: var(--slate-light);
-      line-height: 1.6;
-      max-width: 540px;
-    }
-    .newsletter-cta {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-      flex-shrink: 0;
-    }
-    .btn-subscribe {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--navy);
-      background: var(--amber);
-      border: none;
-      padding: 0.6rem 1.4rem;
-      border-radius: 4px;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: background 0.2s;
-    }
-    .btn-subscribe:hover { background: #d97706; }
-    .newsletter-issues {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--slate);
-      text-align: center;
-    }
-
-    /* ─── CONTACT CTA ─────────────────────────────────── */
-    .contact-cta {
-      background: var(--navy-light);
-      border: 1px solid rgba(20,184,166,0.12);
-      border-radius: 10px;
-      padding: 3rem 2.5rem;
-      text-align: center;
-    }
-    .contact-cta-label {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--teal);
-      opacity: 0.7;
-      margin-bottom: 0.75rem;
-    }
-    .contact-cta h2 { font-size: 1.6rem; margin-bottom: 0.75rem; }
-    .contact-cta-sub {
-      font-size: 0.9rem;
-      color: var(--slate-light);
-      margin-bottom: 2rem;
-      max-width: 460px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.6;
-    }
-    .contact-links {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .btn-primary {
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--navy);
-      background: var(--teal);
-      padding: 0.7rem 1.6rem;
-      border-radius: 4px;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-    .btn-primary:hover { background: #10a394; }
-    .open-to {
-      display: inline-block;
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      color: #4ade80;
-      background: rgba(74,222,128,0.1);
-      border: 1px solid rgba(74,222,128,0.25);
-      border-radius: 3px;
-      padding: 0.2rem 0.6rem;
-      margin-bottom: 1.25rem;
-    }
-
-    /* ─── FOOTER ──────────────────────────────────────── */
-    footer {
-      position: relative;
-      z-index: 1;
-      border-top: 1px solid rgba(20,184,166,0.1);
-      padding: 2rem;
-      text-align: center;
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--slate);
-    }
+      --bg:#F8F9FB;--surface:#FFFFFF;--border:#E4E7EC;--border-2:#CDD2DA;
+      --text:#101828;--text-2:#344054;--text-3:#667085;
+      --accent:#1A56DB;--accent-bg:#EBF5FF;
+      --green:#027A48;--green-bg:#ECFDF3;
+      --amber:#B54708;--amber-bg:#FFFAEB;
+      --fm:'JetBrains Mono',monospace;--fs:'Plus Jakarta Sans',sans-serif;--w:760px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:var(--fs);font-size:16px;line-height:1.7;}
+    nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:52px;}
+    .nav-name{font-size:14px;font-weight:700;color:var(--text);text-decoration:none;}
+    nav ul{display:flex;gap:1.5rem;list-style:none;}
+    nav a{font-size:13px;color:var(--text-3);text-decoration:none;transition:color .15s;}
+    nav a:hover{color:var(--accent);}
+    .nav-gh{font-family:var(--fm);font-size:12px;color:var(--text-3);text-decoration:none;transition:color .15s;}
+    .nav-gh:hover{color:var(--accent);}
+    @media(max-width:620px){nav ul{display:none;}}
+    main{max-width:var(--w);margin:0 auto;padding:0 2rem;}
+    section{padding:4rem 0;border-bottom:1px solid var(--border);}
+    section:last-child{border-bottom:none;}
+    .slabel{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:1.5rem;}
+    #hero{padding:5rem 0 4rem;}
+    .hero-grid{display:grid;grid-template-columns:1fr 240px;gap:3rem;align-items:center;}
+    @media(max-width:600px){.hero-grid{grid-template-columns:1fr;}.hero-photo{display:flex;justify-content:center;order:-1;}}
+    .hero-photo img{width:220px;height:220px;border-radius:50%;object-fit:cover;object-position:top center;border:4px solid var(--surface);box-shadow:0 0 0 1px var(--border),0 8px 32px rgba(0,0,0,.1);}
+    @media(max-width:600px){.hero-photo img{width:160px;height:160px;}}
+    h1{font-size:clamp(2.2rem,5.5vw,3.6rem);font-weight:700;line-height:1.08;letter-spacing:-.02em;color:var(--text);margin-bottom:.875rem;}
+    .hero-roles{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;margin-bottom:1rem;}
+    .role-pill{font-size:12px;font-weight:600;letter-spacing:.03em;padding:.3rem .875rem;border-radius:20px;background:var(--accent-bg);color:var(--accent);}
+    .hero-bio{font-size:15px;color:var(--text-2);line-height:1.65;margin-bottom:2rem;}
+    .hero-links{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2.5rem;}
+    .btn{display:inline-flex;align-items:center;gap:.3rem;padding:.45rem 1.1rem;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;transition:all .15s;border:1px solid transparent;}
+    .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+    .btn-primary:hover{background:#1447C0;border-color:#1447C0;text-decoration:none;}
+    .btn-ghost{background:var(--surface);color:var(--text-2);border-color:var(--border-2);}
+    .btn-ghost:hover{border-color:var(--accent);color:var(--accent);text-decoration:none;}
+    .now-row{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;}
+    .now-lbl{font-family:var(--fm);font-size:11px;color:var(--text-3);letter-spacing:.06em;}
+    .chip{font-size:12px;font-weight:500;padding:.2rem .75rem;border-radius:20px;border:1px solid var(--border-2);background:var(--surface);color:var(--text-2);text-decoration:none;transition:all .15s;white-space:nowrap;}
+    .chip:hover{border-color:var(--accent);color:var(--accent);text-decoration:none;}
+    .chip-live{border-color:#A6F4C5;background:var(--green-bg);color:var(--green);}
+    h2{font-size:1.5rem;font-weight:700;margin-bottom:.75rem;color:var(--text);}
+    a{color:var(--accent);}
+    p{color:var(--text-2);}
+    .pub-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:1.25rem 1.5rem;margin-bottom:1.25rem;}
+    .pub-badge{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem;}
+    .pub-title{font-size:1rem;font-weight:600;line-height:1.4;margin-bottom:.3rem;color:var(--text);}
+    .pub-meta{font-family:var(--fm);font-size:11px;color:var(--text-3);margin-bottom:.6rem;}
+    .pub-desc{font-size:14px;color:var(--text-2);line-height:1.6;}
+    .dispatch-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:0 10px 10px 0;padding:1.25rem 1.5rem;}
+    .dispatch-badge{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--amber);margin-bottom:.4rem;}
+    .art-list{display:flex;flex-direction:column;gap:.75rem;margin:1.25rem 0;}
+    .art-row{display:flex;gap:1rem;align-items:flex-start;padding:.875rem 1.1rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:inherit;transition:border-color .15s;}
+    .art-row:hover{border-color:var(--accent);text-decoration:none;}
+    .art-date{font-family:var(--fm);font-size:10px;color:var(--text-3);white-space:nowrap;padding-top:.2rem;min-width:50px;}
+    .art-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:.2rem;line-height:1.4;}
+    .art-desc{font-size:13px;color:var(--text-3);line-height:1.5;margin-bottom:.4rem;}
+    .art-tags{display:flex;gap:.35rem;flex-wrap:wrap;}
+    .atag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;}
+    .atag-blue{background:var(--accent-bg);color:var(--accent);}
+    .atag-amber{background:var(--amber-bg);color:var(--amber);}
+    .exp-block{margin-bottom:2.25rem;}
+    .exp-block:last-child{margin-bottom:0;}
+    .exp-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.4rem;}
+    .exp-title{font-size:1rem;font-weight:700;color:var(--text);}
+    .exp-org{font-size:13px;color:var(--accent);margin-bottom:.5rem;}
+    .exp-dates{font-family:var(--fm);font-size:11px;color:var(--text-3);white-space:nowrap;padding-top:.25rem;}
+    .exp-list{list-style:none;}
+    .exp-list li{font-size:14px;color:var(--text-2);padding-left:1rem;position:relative;margin-bottom:.3rem;line-height:1.55;}
+    .exp-list li::before{content:'–';position:absolute;left:0;color:var(--border-2);}
+    .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    @media(max-width:560px){.pgrid{grid-template-columns:1fr;}}
+    .pcard{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:border-color .15s,box-shadow .15s;}
+    .pcard:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(26,86,219,.08);text-decoration:none;}
+    .pcard-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;}
+    .pname{font-family:var(--fm);font-size:14px;font-weight:500;color:var(--text);}
+    .pdesc{font-size:13px;color:var(--text-2);line-height:1.55;margin-bottom:1rem;flex:1;}
+    .tags{display:flex;flex-wrap:wrap;gap:.35rem;}
+    .tag{font-size:11px;padding:2px 7px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text-3);}
+    .badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.02em;}
+    .b-live{background:var(--green-bg);color:var(--green);}
+    .b-dev{background:var(--amber-bg);color:var(--amber);}
+    .pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+    @media(max-width:560px){.pkg-grid{grid-template-columns:1fr;}}
+    .pkg{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem;}
+    .pkgname{font-family:var(--fm);font-size:14px;font-weight:500;color:var(--green);margin-bottom:.2rem;}
+    .pkgreg{font-size:11px;color:var(--text-3);margin-bottom:.5rem;}
+    .pkgdesc{font-size:13px;color:var(--text-2);line-height:1.55;}
+    .comm-list{display:flex;flex-direction:column;gap:.6rem;}
+    .comm-item{display:flex;gap:.875rem;align-items:flex-start;padding:.875rem 1.1rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;}
+    .comm-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:.5rem;}
+    .comm-dot-amber{background:#F59E0B;}
+    .comm-dot-grey{background:var(--border-2);}
+    .comm-role{font-size:14px;font-weight:600;color:var(--text);line-height:1.3;}
+    .comm-org{font-size:13px;color:var(--accent);margin-top:.1rem;margin-bottom:.2rem;}
+    .comm-desc{font-size:13px;color:var(--text-3);line-height:1.5;}
+    .skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.75rem;}
+    @media(max-width:640px){.skills-grid{grid-template-columns:repeat(2,1fr);}}
+    .sc{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:.6rem;}
+    .si{list-style:none;}
+    .si li{font-size:13px;color:var(--text-2);padding:.15rem 0;line-height:1.5;}
+    .edu-row{display:flex;justify-content:space-between;align-items:flex-start;padding:.875rem 0;border-bottom:1px solid var(--border);}
+    .edu-row:last-child{border-bottom:none;}
+    .edeg{font-size:15px;font-weight:600;color:var(--text);}
+    .einst{font-size:13px;color:var(--accent);margin-top:.15rem;}
+    .edates{font-family:var(--fm);font-size:11px;color:var(--text-3);white-space:nowrap;padding-top:.2rem;}
+    .clinks{display:flex;gap:2rem;flex-wrap:wrap;margin-top:1.5rem;}
+    .clink{display:flex;flex-direction:column;gap:.2rem;text-decoration:none;}
+    .clink:hover{text-decoration:none;}
+    .clabel{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);}
+    .cval{font-size:14px;color:var(--accent);}
+    footer{padding:2rem;text-align:center;font-size:12px;color:var(--text-3);border-top:1px solid var(--border);}
+    .mt2{margin-top:1rem;}.mt3{margin-top:1.5rem;}
+    .small-link{font-size:13px;color:var(--text-3);text-decoration:none;}
+    .small-link:hover{color:var(--accent);}
   </style>
 </head>
 <body>
-  <div class="grid-bg"></div>
 
-  <nav>
-    <a href="#" class="nav-brand">chris<span>lyonsKY</span></a>
-    <ul class="nav-links">
-      <li><a href="#summary">About</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#oss">Open Source</a></li>
-      <li><a href="#newsletter">Writing</a></li>
-      <li><a href="#repos">Repos</a></li>
-      <li><a href="#projects">Spotlight</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#education">Education</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <a href="https://github.com/chrislyonsKY" class="nav-cta" target="_blank">GitHub</a>
-  </nav>
+<nav>
+  <a href="#" class="nav-name">Chris Lyons</a>
+  <ul>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#community">Community</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://github.com/chrislyonsKY" class="nav-gh">GitHub →</a>
+</nav>
 
-  <header>
-    <div class="header-left">
-      <div class="header-eyebrow">// Portfolio</div>
-      <h1><span class="name-first">Chris</span><span class="name-last">Lyons</span></h1>
-      <div class="header-title">GIS Analyst III · Spatial Developer · 5-Language OSS Author</div>
-      <div class="now-block">
-        <div class="now-label">// now</div>
-        <div class="now-item">Building <a href="https://github.com/chrislyonsKY/tissot" target="_blank">tissot</a> — Rust + WASM projection diagnostics engine with QGIS plugin</div>
-        <div class="now-item">Building <a href="https://github.com/chrislyonsKY/geoflow-stac-mcp" target="_blank">geoflow-stac-mcp</a> — MCP server for AI-driven spatial queries over live STAC catalogs</div>
-        <div class="now-item">Writing <a href="https://nullislanddispatch.substack.com" target="_blank">Null Island Dispatch</a> — GeoAI newsletter on LLMs + spatial reasoning</div>
+<main>
+
+  <section id="hero">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <h1>Chris Lyons</h1>
+        <div class="hero-roles">
+          <span class="role-pill">GIS Analyst III</span>
+          <span class="role-pill">Spatial Developer</span>
+          <span class="role-pill">Published Researcher</span>
+        </div>
+        <p class="hero-bio">
+          Building tools at the intersection of geospatial science and software engineering.
+          Environmental regulatory GIS by day, open-source spatial tooling at every other hour.
+          Based in Frankfort, Kentucky.
+        </p>
+        <div class="hero-links">
+          <a href="mailto:wchrislyons@gmail.com" class="btn btn-primary">✉ Email me</a>
+          <a href="https://www.linkedin.com/in/williamclyons/" class="btn btn-ghost">LinkedIn</a>
+          <a href="https://github.com/chrislyonsKY" class="btn btn-ghost">GitHub</a>
+          <a href="https://null-island-dispatch.com" class="btn btn-ghost">Newsletter</a>
+        </div>
+        <div class="now-row">
+          <span class="now-lbl">now //</span>
+          <a href="https://github.com/chrislyonsKY/ArcLink" class="chip chip-live">ArcLink</a>
+          <a href="https://github.com/chrislyonsKY/tissot" class="chip chip-live">tissot</a>
+          <a href="https://null-island-dispatch.com" class="chip">Null Island Dispatch</a>
+        </div>
       </div>
-    </div>
-    <div class="header-contact">
-      <a href="/cdn-cgi/l/email-protection#34584d5b5a4743040c745359555d581a575b59" class="contact-item">
-        <span class="icon">✉</span> <span class="__cf_email__" data-cfemail="84e8fdebeaf7f3b4bcc4e3e9e5ede8aae7ebe9">[email&#160;protected]</span>
-      </a>
-      <a href="https://www.linkedin.com/in/chrislyonsgis" class="contact-item" target="_blank">
-        <span class="icon">in</span> LinkedIn
-      </a>
-      <a href="https://github.com/chrislyonsKY" class="contact-item" target="_blank">
-        <span class="icon">⌥</span> GitHub
-      </a>
-      <span class="contact-item">
-        <span class="icon">📍</span> Frankfort, Kentucky
-      </span>
-    </div>
-  </header>
-
-  <!-- PROFESSIONAL SUMMARY -->
-  <section id="summary">
-    <div class="container">
-      <hr class="section-rule">
-      <div class="section-header">
-        <h2>Professional Summary</h2>
-        <span class="section-tag">About</span>
-      </div>
-      <div class="summary-block">
-        GIS Analyst III specializing in environmental regulatory workflows, enterprise geodatabase development, and spatial automation. Expertise in bridging legacy systems with modern GIS technologies through custom ArcPy scripting, ArcGIS Pro SDK development, and production-ready automation tools. Publisher of <em>Null Island Dispatch</em>, a newsletter exploring GeoAI and the intersection of artificial intelligence with geospatial technologies.
+      <div class="hero-photo">
+        <img src="headshot.jpg" alt="Chris Lyons">
       </div>
     </div>
   </section>
 
-  <!-- PROFESSIONAL EXPERIENCE -->
+  <section id="about">
+    <div class="slabel">About</div>
+    <p style="max-width:620px;margin-bottom:.75rem;">
+      GIS Analyst III at the Kentucky Energy and Environment Cabinet, where I design enterprise
+      geodatabase workflows, automate environmental regulatory data pipelines, and develop custom
+      ArcGIS Pro SDK add-ins for mine permitting and reclamation programs.
+    </p>
+    <p style="font-size:14px;color:var(--text-3);max-width:620px;">
+      My practice sits at the intersection of legacy government GIS infrastructure and modern
+      cloud-native spatial development. I publish peer-reviewed research, maintain open-source
+      Python packages on PyPI, and write about GeoAI through the <em>Null Island Dispatch</em> newsletter.
+    </p>
+  </section>
+
+  <section id="research">
+    <div class="slabel">Research &amp; Writing</div>
+
+    <div class="pub-card">
+      <div class="pub-badge">First Author · Peer Reviewed · 2024</div>
+      <div class="pub-title">Evaluating Spectral Properties of Invasive Plant Species in Central Kentucky Recreation Areas</div>
+      <div class="pub-meta">Lyons, W. · <em>International Journal of Remote Sensing</em> · 2024 &nbsp;·&nbsp; <a href="https://doi.org/10.1080/01431161.2024.2391095">DOI: 10.1080/01431161.2024.2391095 →</a></div>
+      <div class="pub-desc">Spectral analysis of invasive plant species in central Kentucky recreation areas, evaluating reflectance properties to distinguish invasive species from native vegetation. Underpins the spectral signature datasets in speclib and classification workflows in KyCanopy.</div>
+    </div>
+
+    <div class="slabel mt3" style="margin-bottom:1rem;">Esri YPN Blog &nbsp;·&nbsp; Content Ambassador</div>
+    <div class="art-list">
+      <a href="https://community.esri.com/t5/esri-young-professionals-network-blog/from-prompt-to-product-how-i-use-ai-tools-to/ba-p/1685489" class="art-row">
+        <div class="art-date">Feb 2026</div>
+        <div>
+          <div class="art-title">From Prompt to Product: How I Use AI Tools to Supercharge My GIS Workflow</div>
+          <div class="art-desc">A practitioner's take on integrating AI into ArcPy and Pro SDK workflows — and why domain knowledge matters more, not less, in the age of AI.</div>
+          <div class="art-tags"><span class="atag atag-blue">Esri YPN Blog</span><span class="atag atag-amber">The GIS Professional · Issue 330</span></div>
+        </div>
+      </a>
+      <a href="https://community.esri.com/t5/esri-young-professionals-network-blog/bridging-the-gap-helping-non-gis-users-in-the/ba-p/1631506" class="art-row">
+        <div class="art-date">Jul 2025</div>
+        <div>
+          <div class="art-title">Bridging the Gap: Helping Non-GIS Users in the Public Sector</div>
+          <div class="art-desc">Designing GIS tools for non-technical government workers — custom add-ins that prioritize outcomes over complexity.</div>
+          <div class="art-tags"><span class="atag atag-blue">Esri YPN Blog</span></div>
+        </div>
+      </a>
+      <a href="https://community.esri.com/t5/esri-young-professionals-network-blog/making-the-most-of-conferences-insights-from-a/ba-p/1599513" class="art-row">
+        <div class="art-date">Apr 2025</div>
+        <div>
+          <div class="art-title">Making the Most of Conferences: Insights from a Fellow Professional</div>
+          <div class="art-desc">Practical advice for young GIS professionals on preparing for and following up after geospatial conferences.</div>
+          <div class="art-tags"><span class="atag atag-blue">Esri YPN Blog</span></div>
+        </div>
+      </a>
+    </div>
+
+    <div class="dispatch-card mt3">
+      <div class="dispatch-badge">Newsletter · Weekly</div>
+      <div class="pub-title" style="margin-bottom:.3rem;">Null Island Dispatch</div>
+      <div class="pub-meta">null-island-dispatch.com</div>
+      <div class="pub-desc" style="margin-bottom:1rem;">A practitioner-focused newsletter on large language models and geospatial technology. Written by someone who builds the tools, not just writes about them.</div>
+      <a href="https://null-island-dispatch.com" class="btn btn-ghost" style="display:inline-flex;font-size:12px;">Read / Subscribe →</a>
+    </div>
+  </section>
+
   <section id="experience">
-    <div class="container">
-      <hr class="section-rule">
-      <div class="section-header">
-        <h2>Professional Experience</h2>
-        <span class="section-tag">Work</span>
+    <div class="slabel">Experience</div>
+    <div class="exp-block">
+      <div class="exp-header">
+        <div><div class="exp-title">GIS Analyst III</div><div class="exp-org">Kentucky Energy &amp; Environment Cabinet — GIS Branch</div></div>
+        <div class="exp-dates">June 2023 – Present</div>
       </div>
-
-      <div class="experience-item">
-        <div class="job-header">
-          <div>
-            <div class="job-title">GIS Analyst III</div>
-            <div class="job-org">Kentucky Energy &amp; Environment Cabinet</div>
-          </div>
-          <div class="job-dates">2019 – Present</div>
-        </div>
-        <ul class="job-bullets">
-          <li>Design and maintain enterprise geodatabases supporting statewide environmental regulatory workflows</li>
-          <li>Develop custom ArcPy scripts and ArcGIS Pro SDK add-ins to automate spatial data processing and map generation</li>
-          <li>Modernize legacy ArcMap workflows to ArcGIS Pro, migrating Microsoft Access-dependent processes to enterprise geodatabases</li>
-          <li>Develop and maintain automated geospatial data processing pipelines</li>
-          <li>Implement automated data validation and quality control processes for geospatial datasets</li>
-          <li>Develop automated map series and reporting systems for regulatory documentation</li>
-        </ul>
+      <ul class="exp-list">
+        <li>Lead GIS analysis supporting mine permitting, compliance monitoring, and regulatory reporting</li>
+        <li>Automated spatial workflows using Python, ArcPy, and ArcGIS Pro SDK — cutting manual processing time by ~45%</li>
+        <li>Develop and maintain custom ArcGIS Pro SDK add-ins to replace legacy tools and standardize operations</li>
+        <li>Manage enterprise Oracle SDE geodatabases and coordinate with DGI on statewide data standards</li>
+      </ul>
+    </div>
+    <div class="exp-block">
+      <div class="exp-header">
+        <div><div class="exp-title">GIS Technician</div><div class="exp-org">NV5 Geospatial</div></div>
+        <div class="exp-dates">Nov 2022 – June 2023</div>
       </div>
+      <ul class="exp-list">
+        <li>QC and validation of statewide high-resolution orthoimagery covering 3,000+ square miles</li>
+        <li>Aerial triangulation, accuracy assessments, and metrology documentation</li>
+      </ul>
+    </div>
+    <div class="exp-block">
+      <div class="exp-header">
+        <div><div class="exp-title">Engineering Technician</div><div class="exp-org">Qk4, Inc.</div></div>
+        <div class="exp-dates">May 2021 – Nov 2022</div>
+      </div>
+      <ul class="exp-list">
+        <li>2D/3D plats in AutoCAD and MicroStation for transportation and civil infrastructure projects</li>
+        <li>UAS data collection, photogrammetric processing, and QA for construction monitoring</li>
+        <li>Won <strong>AASHTO GIS-T Map Gallery People's Choice Award (2022)</strong> for a DSM visualization project</li>
+      </ul>
     </div>
   </section>
 
-  <!-- TECHNICAL SKILLS -->
-  <section id="skills">
-    <div class="container">
-      <hr class="section-rule">
-      <div class="section-header">
-        <h2>Technical Skills</h2>
-        <span class="section-tag">Stack</span>
-      </div>
-      <div class="skills-grid">
-        <div class="skill-category">
-          <div class="skill-cat-title">GIS Platforms</div>
-          <div class="skill-tags">
-            <span class="skill-tag">ArcGIS Pro</span>
-            <span class="skill-tag">ArcGIS Enterprise</span>
-            <span class="skill-tag">Global Mapper</span>
-            <span class="skill-tag">ArcGIS Online</span>
-            <span class="skill-tag">QGIS</span>
-          </div>
-        </div>
-        <div class="skill-category">
-          <div class="skill-cat-title">Development</div>
-          <div class="skill-tags">
-            <span class="skill-tag">Python / ArcPy</span>
-            <span class="skill-tag">C# / .NET</span>
-            <span class="skill-tag">TypeScript</span>
-            <span class="skill-tag">Rust</span>
-            <span class="skill-tag">R</span>
-            <span class="skill-tag">JavaScript</span>
-            <span class="skill-tag">React</span>
-            <span class="skill-tag">Node.js</span>
-          </div>
-        </div>
-        <div class="skill-category">
-          <div class="skill-cat-title">Spatial / Cloud</div>
-          <div class="skill-tags">
-            <span class="skill-tag">DuckDB Spatial</span>
-            <span class="skill-tag">GeoParquet</span>
-            <span class="skill-tag">COG / STAC</span>
-            <span class="skill-tag">PMTiles</span>
-            <span class="skill-tag">sf / terra</span>
-            <span class="skill-tag">NetTopologySuite</span>
-          </div>
-        </div>
-        <div class="skill-category">
-          <div class="skill-cat-title">Database Systems</div>
-          <div class="skill-tags">
-            <span class="skill-tag">Enterprise Geodatabase</span>
-            <span class="skill-tag">Oracle Spatial</span>
-            <span class="skill-tag">SQL Server</span>
-            <span class="skill-tag">PostGIS</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- OPEN SOURCE PROJECTS -->
-  <section id="oss">
-    <div class="container">
-      <hr class="section-rule">
-      <div class="section-header">
-        <h2>Open Source</h2>
-        <span class="section-tag">Packages</span>
-      </div>
-      <p class="oss-intro">
-        Filling the gaps in the geospatial tooling ecosystem — cloud-native I/O, data quality, ETL pipelines, and accessible cartography. Packages for Python, R, .NET, TypeScript, and Rust. All on <a href="https://github.com/chrislyonsKY" target="_blank">GitHub</a>.
-      </p>
-
-      <!-- Discovery / Cloud-Native -->
-      <div class="tier-group tier-discovery">
-        <div class="tier-label">Cloud-Native I/O</div>
-        <div class="pkg-grid">
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/cloudgeo" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">cloudgeo</span>
-              <span class="pkg-badge badge-py">PY</span>
-              <span class="pkg-badge badge-r">R</span>
-            </div>
-            <div class="pkg-desc">Unified cloud-native reader/writer. S3, GCS, STAC, COG, GeoParquet — one API, familiar return types.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/overturer" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">overturer</span>
-              <span class="pkg-badge badge-py">PY</span>
-              <span class="pkg-badge badge-r">R</span>
-            </div>
-            <div class="pkg-desc">First-class Overture Maps access. 2B+ buildings, 50M+ places via DuckDB predicate pushdown.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/pmtilesr" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">pmtilesr</span>
-              <span class="pkg-badge badge-r">R</span>
-            </div>
-            <div class="pkg-desc">PMTiles reader/writer for R. HTTP range requests, MVT decoding, leaflet integration.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/stacr" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">stacr</span>
-              <span class="pkg-badge badge-r">R</span>
-            </div>
-            <div class="pkg-desc">Tidy STAC workflows. Pipe-friendly rstac wrapper — search, download, cube — returns tibbles.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/duckgeo" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">duckgeo</span>
-              <span class="pkg-badge badge-r">R</span>
-            </div>
-            <div class="pkg-desc">DuckDB spatial workflows with tidy syntax. Read remote GeoParquet, run spatial SQL, get sf back.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/overture-query" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">overture-query</span>
-              <span class="pkg-badge badge-ts">TS</span>
-            </div>
-            <div class="pkg-desc">Browser-native Overture Maps access via DuckDB-WASM. No backend required.</div>
-          </a>
-        </div>
-      </div>
-
-      <!-- Data Quality -->
-      <div class="tier-group tier-quality">
-        <div class="tier-label">Data Quality &amp; Validation</div>
-        <div class="pkg-grid">
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/spatial-validate" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">spatial-validate</span>
-              <span class="pkg-badge badge-py">PY</span>
-            </div>
-            <div class="pkg-desc">Composable geometry and attribute validation. Structured findings, pipe-friendly.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/spatialvalidate" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">spatialvalidate</span>
-              <span class="pkg-badge badge-r">R</span>
-            </div>
-            <div class="pkg-desc">R companion — tidy tibble validation findings for sf objects.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/SpatialValidate" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">SpatialValidate</span>
-              <span class="pkg-badge badge-cs">C#</span>
-            </div>
-            <div class="pkg-desc">Fluent validation pipeline for NTS geometries. xUnit/NUnit assertion helpers.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/geojson-validate" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">geojson-validate</span>
-              <span class="pkg-badge badge-ts">TS</span>
-            </div>
-            <div class="pkg-desc">Composable GeoJSON validation. Zero deps, structured error reports, CI-friendly.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/schema-enforcer" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">schema-enforcer</span>
-              <span class="pkg-badge badge-py">PY</span>
-            </div>
-            <div class="pkg-desc">Declarative YAML schema contracts for spatial data. Write once, enforce in Python, R, and .NET.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/geoinventory" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">geoinventory</span>
-              <span class="pkg-badge badge-py">PY</span>
-            </div>
-            <div class="pkg-desc">Scan, document, and diff any spatial dataset. Profiles schema, CRS, extent, and field statistics.</div>
-          </a>
-        </div>
-      </div>
-
-      <!-- Visualization / Accessibility -->
-      <div class="tier-group tier-etl">
-        <div class="tier-label">Cartography &amp; Accessibility</div>
-        <div class="pkg-grid">
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/kartocolors" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">kartocolors</span>
-              <span class="pkg-badge badge-r">R</span>
-              <span class="pkg-badge badge-cs">C#</span>
-              <span class="pkg-badge badge-ts">TS</span>
-            </div>
-            <div class="pkg-desc">Curated cartographic palettes — pre-tested WCAG 2.1 AA, colorblind-safe, ggplot2/Blazor ready.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/map-accessibility" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">map-accessibility</span>
-              <span class="pkg-badge badge-py">PY</span>
-              <span class="pkg-badge badge-r">R</span>
-            </div>
-            <div class="pkg-desc">WCAG 2.1 AA contrast ratio checking and CVD simulation for cartographic palettes.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/georender" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">georender</span>
-              <span class="pkg-badge badge-r">R</span>
-            </div>
-            <div class="pkg-desc">Publication-ready map rendering. Scale bars, north arrows, insets — 300 DPI by default.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/map-a11y" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">map-a11y</span>
-              <span class="pkg-badge badge-ts">TS</span>
-            </div>
-            <div class="pkg-desc">Cartographic WCAG checking for web maps. Adjacent polygon contrast, legend readability, CVD simulation.</div>
-          </a>
-        </div>
-      </div>
-
-      <!-- Tools / GeoAI -->
-      <div class="tier-group tier-tools">
-        <div class="tier-label">GeoAI &amp; Developer Tools</div>
-        <div class="pkg-grid">
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/geoai-toolkit" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">geoai-toolkit</span>
-              <span class="pkg-badge badge-py">PY</span>
-              <span class="pkg-badge badge-r">R</span>
-            </div>
-            <div class="pkg-desc">LLM utilities for spatial workflows. Coordinate parsing, GeoJSON description for context windows.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/tissot" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">tissot</span>
-              <span class="pkg-badge badge-rs">RS</span>
-            </div>
-            <div class="pkg-desc">Visual projection diagnostics. Per-feature distortion heatmaps, CRS recommendations, MapLibre reports.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/envdatar" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">envdatar</span>
-              <span class="pkg-badge badge-r">R</span>
-            </div>
-            <div class="pkg-desc">One-stop EPA, USGS, NWS, and KY environmental data access. Consistent tidy interface.</div>
-          </a>
-          <a class="pkg-card" href="https://github.com/chrislyonsKY/geo-llm" target="_blank">
-            <div class="pkg-card-top">
-              <span class="pkg-name">geo-llm</span>
-              <span class="pkg-badge badge-ts">TS</span>
-            </div>
-            <div class="pkg-desc">TypeScript LLM utilities for geospatial workflows. Zero dependencies, coordinate parsing, prompt templates.</div>
-          </a>
-        </div>
-      </div>
-
-      <div class="oss-footer">
-        <a href="https://github.com/chrislyonsKY" class="btn-ghost" target="_blank">View all repositories on GitHub →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- NEWSLETTER -->
-  <section id="newsletter">
-    <div class="container">
-      <hr class="section-rule">
-      <div class="section-header">
-        <h2>Writing</h2>
-        <span class="section-tag">Dispatch</span>
-      </div>
-      <div class="newsletter-card">
-        <div class="newsletter-accent"></div>
-        <div class="newsletter-body">
-          <div>
-            <div class="newsletter-eyebrow">// Newsletter · GeoAI</div>
-            <div class="newsletter-title">Null Island Dispatch</div>
-            <div class="newsletter-desc">A practitioner-focused newsletter on the intersection of large language models and geospatial technology. Covers GeoAI tooling, cloud-native spatial workflows, open-source package releases, and experiments with LLM-driven spatial reasoning. Written from the perspective of someone who builds the tools, not just writes about them.</div>
-          </div>
-          <div class="newsletter-cta">
-            <a href="https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7430666057171939328" class="btn-subscribe" target="_blank">Read / Subscribe</a>
-            <div class="newsletter-issues">linkedin · free</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- GITHUB REPOS -->
-  <section id="repos">
-    <div class="container">
-      <hr class="section-rule">
-      <div class="section-header">
-        <h2>GitHub Repositories</h2>
-        <span class="section-tag">Public</span>
-      </div>
-      <div class="repos-grid">
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/tissot" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">tissot</span></div>
-          <div class="repo-desc">Visual projection diagnostics engine — per-feature distortion heatmaps, CRS recommendations, QGIS plugin, CLI, WebAssembly.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-rust"></span>Rust</span><span class="repo-updated">Mar 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/FaultLine" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">FaultLine</span></div>
-          <div class="repo-desc">Cloud-native geospatial change engine for comparing, validating, and tracking dataset evolution across GeoParquet, COG, and PMTiles.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-rust"></span>Rust</span><span class="repo-updated">Mar 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/geoflow-stac-mcp" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">geoflow-stac-mcp</span></div>
-          <div class="repo-desc">Analytical MCP server for SpatioTemporal Asset Catalogs — AI-driven spatial workflows with DuckDB compute pushed to the edge.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-rust"></span>Rust</span><span class="repo-updated">Mar 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/GeoWorkbench" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">GeoWorkbench</span></div>
-          <div class="repo-desc">AI-driven spatial analysis workbench. Natural language → structured GIS workflows with explainable dataset discovery across services.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-ts"></span>TypeScript</span><span class="repo-updated">Mar 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/ProPilot" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">ProPilot</span></div>
-          <div class="repo-desc">Natural language command interface for ArcGIS Pro. Type plain English, preview the action, execute with confidence. Bundled local AI — no API keys.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-csharp"></span>C#</span><span class="repo-updated">Mar 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/MapAccessibility" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">MapAccessibility</span></div>
-          <div class="repo-desc">WCAG 2.1 color accessibility checking for cartographic palettes. Zero external dependencies. .NET 8.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-csharp"></span>C#</span><span class="repo-updated">Mar 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/MeridianWebsite" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">MeridianWebsite</span></div>
-          <div class="repo-desc">News synthesis platform — ingests articles across the political spectrum, clusters by story with AI, produces neutral fact-first summaries.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-ts"></span>TypeScript</span><span class="repo-updated">Mar 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/Declination-Conflict-Map" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">Declination</span></div>
-          <div class="repo-desc">Geopolitical event mapping with multi-source narrative analysis. Conversational AI interface to explore how different news sources frame stories.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-js"></span>JavaScript</span><span class="repo-updated">Mar 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/terra-vista" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">terra-vista</span></div>
-          <div class="repo-desc">Interactive 3D terrain visualizer — load GeoTIFF elevation files, explore with color ramps, elevation exaggeration, and orbit controls.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-ts"></span>TypeScript</span><span class="repo-updated">Feb 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/aboveR" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">aboveR</span></div>
-          <div class="repo-desc">LiDAR terrain analysis and change detection for R — cut/fill volumes, profiling, reclamation monitoring, and KyFromAbove access.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-r"></span>R</span><span class="repo-updated">Mar 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/stacr" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">stacr</span></div>
-          <div class="repo-desc">Tidy STAC workflows for R — pipe-friendly rstac wrapper returning tibbles. Search, filter, download, cube in one API.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-r"></span>R</span><span class="repo-updated">Mar 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/cloudgeo" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">cloudgeo</span></div>
-          <div class="repo-desc">Unified cloud-native geospatial reader/writer for R — S3, GCS, STAC, COG, GeoParquet via one API.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-r"></span>R</span><span class="repo-updated">Mar 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/cryptid-tracker-ky" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">cryptid-tracker-ky</span></div>
-          <div class="repo-desc">Real-time Kentucky Cryptid Tracker — a delightfully unserious spatial data pipeline project.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-python"></span>Python</span><span class="repo-updated">Mar 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/ClaudeCodeAgents" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">ClaudeCodeAgents</span></div>
-          <div class="repo-desc">Reusable agent configurations for Claude Code — architect, domain expert, and reviewer personas for AI-assisted development.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-html"></span>Markdown</span><span class="repo-updated">Feb 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/AI-Dev-Library" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">AI-Dev-Library</span></div>
-          <div class="repo-desc">Curated library of AI-assisted development patterns, prompts, and scaffolding templates.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-html"></span>Docs</span><span class="repo-updated">Mar 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/gis_markdown_badges" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">gis_markdown_badges</span></div>
-          <div class="repo-desc">Collection of GIS-themed markdown badges for README files — ArcGIS, QGIS, spatial formats, and more.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-html"></span>Markdown</span><span class="repo-updated">Feb 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/signal-lost-web" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">signal-lost-web</span></div>
-          <div class="repo-desc">Web companion to Signal Lost — an atmospheric sci-fi experience built with Three.js.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-html"></span>HTML</span><span class="repo-updated">Feb 2026</span></div>
-        </a>
-
-        <a class="repo-card" href="https://github.com/chrislyonsKY/null-island-labs.github.io" target="_blank">
-          <div class="repo-card-header"><span class="repo-icon">⬡</span><span class="repo-name">null-island-labs.github.io</span></div>
-          <div class="repo-desc">Package showcase site for Null Island Labs — the open-source geospatial tooling ecosystem.</div>
-          <div class="repo-meta"><span class="repo-lang"><span class="lang-dot lang-html"></span>HTML</span><span class="repo-updated">Mar 2026</span></div>
-        </a>
-
-      </div>
-    </div>
-  </section>
   <section id="projects">
-    <div class="container">
-      <hr class="section-rule">
-      <div class="section-header">
-        <h2>Signature Projects</h2>
-        <span class="section-tag">Builds</span>
+    <div class="slabel">Projects</div>
+    <div class="pgrid">
+      <a href="https://github.com/chrislyonsKY" class="pcard">
+        <div class="pcard-top"><div class="pname">WatershedIQ</div><span class="badge b-live">active</span></div>
+        <div class="pdesc">Containerized watershed intelligence platform. FastAPI + deck.gl + MapLibre 2D, Babylon.js 3D terrain panel, animated particle flow. KyFromAbove DEM integration, pysheds + WhiteboxTools.</div>
+        <div class="tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">deck.gl</span><span class="tag">Babylon.js</span><span class="tag">PostGIS</span></div>
+      </a>
+      <a href="https://github.com/chrislyonsKY" class="pcard">
+        <div class="pcard-top"><div class="pname">Echelon</div><span class="badge b-live">active</span></div>
+        <div class="pdesc">Open-source GEOINT intelligence dashboard. React/TypeScript + MapLibre GL + Deck.gl, FastAPI, H3 resolution breakpoints, Z-score convergence scoring against 365-day rolling baselines.</div>
+        <div class="tags"><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">MapLibre GL</span><span class="tag">H3</span><span class="tag">FastAPI</span></div>
+      </a>
+      <a href="https://github.com/chrislyonsKY/ArcLink" class="pcard">
+        <div class="pcard-top"><div class="pname">ArcLink</div><span class="badge b-dev">in dev</span></div>
+        <div class="pdesc">GPL-3.0 MCP bridge connecting ArcGIS Pro to AI agent ecosystems. Python/arcpy headless server + C# Pro SDK interactive server. Targets ArcGIS Pro 3.6+ / .NET 8.</div>
+        <div class="tags"><span class="tag">C#</span><span class="tag">.NET 8</span><span class="tag">ArcGIS Pro SDK</span><span class="tag">Python</span><span class="tag">MCP</span></div>
+      </a>
+      <a href="https://github.com/chrislyonsKY/tissot" class="pcard">
+        <div class="pcard-top"><div class="pname">tissot</div><span class="badge b-live">active</span></div>
+        <div class="pdesc">Visual projection diagnostics engine. Per-feature distortion heatmaps, CRS recommendations with quantified evidence, offline MapLibre reports. Rust core, PyO3 bindings, WASM, QGIS plugin.</div>
+        <div class="tags"><span class="tag">Rust</span><span class="tag">PyO3</span><span class="tag">WebAssembly</span><span class="tag">QGIS</span><span class="tag">MapLibre</span></div>
+      </a>
+      <a href="https://github.com/chrislyonsKY" class="pcard">
+        <div class="pcard-top"><div class="pname">speclib</div><span class="badge b-dev">in dev</span></div>
+        <div class="pdesc">Spectral signature library platform. Federated ingestion from USGS, ECOSTRESS, EMIT. Kentucky collections for invasives, minerals, reclamation substrates. Seeded from Lyons et al. 2024.</div>
+        <div class="tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">D3.js</span><span class="tag">HDF5</span><span class="tag">Remote Sensing</span></div>
+      </a>
+      <a href="https://github.com/chrislyonsKY" class="pcard">
+        <div class="pcard-top"><div class="pname">CoalTrace</div><span class="badge b-dev">in dev</span></div>
+        <div class="pdesc">Multi-temporal reclamation segmentation. SAM2 zero-shot + spectral classification, ResNet-50 multi-task segmentation + bond release classification. Pilot: Pike County, KY.</div>
+        <div class="tags"><span class="tag">Python</span><span class="tag">SAM2</span><span class="tag">ResNet-50</span><span class="tag">ArcPy</span><span class="tag">KyFromAbove</span></div>
+      </a>
+    </div>
+    <p class="mt2"><a href="https://github.com/chrislyonsKY" class="small-link">View all repositories on GitHub →</a></p>
+  </section>
+
+  <section id="oss">
+    <div class="slabel">Open Source Packages</div>
+    <p style="font-size:14px;color:var(--text-3);margin-bottom:1.5rem;">Python packages on PyPI for geospatial remote sensing, LiDAR processing, and data engineering.</p>
+    <div class="pkg-grid">
+      <div class="pkg"><div class="pkgname">AbovePy</div><div class="pkgreg">PyPI · Python</div><div class="pkgdesc">STAC client and data access library for the KyFromAbove LiDAR and orthoimagery catalog.</div></div>
+      <div class="pkg"><div class="pkgname">earthForge</div><div class="pkgreg">PyPI · Python</div><div class="pkgdesc">Cloud-native geospatial data engineering toolkit. GeoParquet I/O and spatial ETL utilities.</div></div>
+      <div class="pkg"><div class="pkgname">occulus</div><div class="pkgreg">PyPI · Python</div><div class="pkgdesc">LiDAR point cloud processing. Change detection, volumetrics, and terrain profile extraction.</div></div>
+    </div>
+  </section>
+
+  <section id="community">
+    <div class="slabel">Community</div>
+    <div class="comm-list">
+      <div class="comm-item">
+        <div class="comm-dot comm-dot-amber"></div>
+        <div><a href="https://www.xyht.com/core-articles/chris-lyons-2025-young-geospatial-professional/" style="color:var(--text);text-decoration:none;"><div class="comm-role">25 Young Geospatial Pros to Watch in 2025</div></a><div class="comm-org">xyHt Magazine</div></div>
       </div>
-      <div class="spotlight-grid">
-
-        <!-- tissot -->
-        <a class="spotlight-card" href="https://github.com/chrislyonsKY/tissot" target="_blank" style="--card-color:#dea584">
-          <div class="spotlight-accent"></div>
-          <div class="spotlight-body">
-            <div class="spotlight-main">
-              <div class="spotlight-top">
-                <span class="spotlight-name">tissot</span>
-                <span class="spotlight-status active">// active</span>
-              </div>
-              <div class="spotlight-tagline">A visual-first geospatial diagnostics engine. Computes per-feature projection distortion, generates Tissot ellipse overlays, recommends better CRS choices with quantified evidence — all rendered as an offline MapLibre report. Rust core with PyO3 bindings and WebAssembly export.</div>
-              <div class="spotlight-stack">
-                <span class="stack-tag">Rust</span>
-                <span class="stack-tag">PyO3</span>
-                <span class="stack-tag">WebAssembly</span>
-                <span class="stack-tag">QGIS Plugin</span>
-                <span class="stack-tag">MapLibre GL JS</span>
-                <span class="stack-tag">CLI</span>
-                <span class="stack-tag">Apache 2.0</span>
-              </div>
-            </div>
-            <div class="spotlight-meta">
-              <span class="spotlight-glyph">⊕</span>
-              <span class="spotlight-link">View →</span>
-            </div>
-          </div>
-        </a>
-
-        <!-- geoflow-stac-mcp -->
-        <a class="spotlight-card" href="https://github.com/chrislyonsKY/geoflow-stac-mcp" target="_blank" style="--card-color:#0EA5E9">
-          <div class="spotlight-accent"></div>
-          <div class="spotlight-body">
-            <div class="spotlight-main">
-              <div class="spotlight-top">
-                <span class="spotlight-name">geoflow-stac-mcp</span>
-                <span class="spotlight-status active">// active</span>
-              </div>
-              <div class="spotlight-tagline">An analytical MCP server for SpatioTemporal Asset Catalogs. Safely orchestrates AI-driven spatial workflows — natural language queries resolved against live STAC endpoints, with compute pushed to the edge via DuckDB. Designed for LLM agents that need real spatial reasoning.</div>
-              <div class="spotlight-stack">
-                <span class="stack-tag">Rust</span>
-                <span class="stack-tag">MCP</span>
-                <span class="stack-tag">DuckDB</span>
-                <span class="stack-tag">STAC</span>
-                <span class="stack-tag">AI Agents</span>
-                <span class="stack-tag">MIT</span>
-              </div>
-            </div>
-            <div class="spotlight-meta">
-              <span class="spotlight-glyph">◈</span>
-              <span class="spotlight-link">View →</span>
-            </div>
-          </div>
-        </a>
-
-        <!-- FaultLine -->
-        <a class="spotlight-card" href="https://github.com/chrislyonsKY/FaultLine" target="_blank" style="--card-color:#F43F5E">
-          <div class="spotlight-accent"></div>
-          <div class="spotlight-body">
-            <div class="spotlight-main">
-              <div class="spotlight-top">
-                <span class="spotlight-name">FaultLine</span>
-                <span class="spotlight-status dev">// in dev</span>
-              </div>
-              <div class="spotlight-tagline">A cloud-native geospatial change engine. Compares, validates, and tracks spatial dataset evolution across modern formats — GeoParquet, COG, and PMTiles — without pulling data locally. Built for production data pipelines that need diff-aware spatial auditing at scale.</div>
-              <div class="spotlight-stack">
-                <span class="stack-tag">Rust</span>
-                <span class="stack-tag">GeoParquet</span>
-                <span class="stack-tag">COG</span>
-                <span class="stack-tag">PMTiles</span>
-                <span class="stack-tag">Cloud-Native</span>
-                <span class="stack-tag">MIT</span>
-              </div>
-            </div>
-            <div class="spotlight-meta">
-              <span class="spotlight-glyph">⚡</span>
-              <span class="spotlight-link">View →</span>
-            </div>
-          </div>
-        </a>
-
+      <div class="comm-item">
+        <div class="comm-dot comm-dot-amber"></div>
+        <div><div class="comm-role">Map Gallery People's Choice Award · 2022</div><div class="comm-org">AASHTO GIS-T Symposium</div><div class="comm-desc">National recognition for a DSM visualization project, selected by attendees spanning DOT agencies from nearly every U.S. state and territory.</div></div>
+      </div>
+      <div class="comm-item">
+        <div class="comm-dot"></div>
+        <div><div class="comm-role">Vanguard Cabinet — 2025–2027 Cohort</div><div class="comm-org">Geospatial Professional Network (GPN)</div><div class="comm-desc">Leadership cabinet for the next generation of geospatial professionals.</div></div>
+      </div>
+      <div class="comm-item">
+        <div class="comm-dot"></div>
+        <div><div class="comm-role">Content Ambassador</div><div class="comm-org">Esri Young Professionals Network (YPN)</div><div class="comm-desc">Regular contributor to the YPN blog on GeoAI and ArcGIS Pro SDK development.</div></div>
+      </div>
+      <div class="comm-item">
+        <div class="comm-dot"></div>
+        <div><div class="comm-role">Current Participant</div><div class="comm-org">Energy &amp; Environment Cabinet Leadership Academy</div></div>
+      </div>
+      <div class="comm-item">
+        <div class="comm-dot"></div>
+        <div><div class="comm-role">Graduate · 2023</div><div class="comm-org">Leadership Shelby</div><div class="comm-desc">Community leadership development focused on civic engagement and strategic thinking, Shelby County, KY.</div></div>
+      </div>
+      <div class="comm-item">
+        <div class="comm-dot"></div>
+        <div><div class="comm-role">Active Member</div><div class="comm-org">American Society for Photogrammetry and Remote Sensing (ASPRS)</div></div>
+      </div>
+      <div class="comm-item">
+        <div class="comm-dot"></div>
+        <div><div class="comm-role">Active Member</div><div class="comm-org">American Geophysical Union (AGU)</div></div>
+      </div>
+      <div class="comm-item">
+        <div class="comm-dot"></div>
+        <div><div class="comm-role">Member</div><div class="comm-org">Cloud Native Geospatial Forum</div><div class="comm-desc">Advancing cloud-optimized open standards: COG, GeoParquet, STAC, PMTiles, GeoArrow.</div></div>
+      </div>
+      <div class="comm-item">
+        <div class="comm-dot comm-dot-grey"></div>
+        <div><div class="comm-role">Past Board Member · General Member</div><div class="comm-org">Kentucky Association of Mapping Professionals (KAMP)</div><div class="comm-desc">Previously served as Director of the Membership Committee.</div></div>
       </div>
     </div>
   </section>
 
-  <!-- EDUCATION -->
+  <section id="skills">
+    <div class="slabel">Skills</div>
+    <div class="skills-grid">
+      <div><div class="sc">GIS Platforms</div><ul class="si"><li>ArcGIS Pro</li><li>ArcGIS Enterprise</li><li>ArcGIS Online</li><li>QGIS</li><li>Global Mapper</li></ul></div>
+      <div><div class="sc">Development</div><ul class="si"><li>Python / ArcPy</li><li>C# / .NET</li><li>TypeScript</li><li>Rust</li><li>R</li></ul></div>
+      <div><div class="sc">Spatial / Cloud</div><ul class="si"><li>COG / STAC</li><li>GeoParquet</li><li>PMTiles</li><li>DuckDB Spatial</li><li>H3 / PostGIS</li></ul></div>
+      <div><div class="sc">Databases</div><ul class="si"><li>Oracle SDE</li><li>Enterprise GDB</li><li>PostGIS</li><li>SQL Server</li></ul></div>
+      <div><div class="sc">ArcGIS SDK</div><ul class="si"><li>Pro SDK (.NET)</li><li>DAML / WPF / MVVM</li><li>JS SDK 5.0</li><li>Calcite</li></ul></div>
+      <div><div class="sc">Web Stack</div><ul class="si"><li>React / Vite</li><li>MapLibre GL</li><li>Deck.gl</li><li>Three.js / Babylon.js</li><li>FastAPI</li></ul></div>
+      <div><div class="sc">Remote Sensing</div><ul class="si"><li>Hyperspectral</li><li>LiDAR / Point Cloud</li><li>KyFromAbove</li><li>DTM / DSM</li><li>GPS &amp; GNSS</li></ul></div>
+      <div><div class="sc">CAD &amp; Survey</div><ul class="si"><li>AutoCAD</li><li>MicroStation</li><li>Civil 3D</li><li>UAS / Drone Ops</li><li>Photogrammetry</li></ul></div>
+    </div>
+  </section>
+
   <section id="education">
-    <div class="container">
-      <hr class="section-rule">
-      <div class="section-header">
-        <h2>Education &amp; Certifications</h2>
-        <span class="section-tag">Academic</span>
-      </div>
-      <div class="education-item">
-        <div class="edu-degree">MS Environmental Science</div>
-        <div class="edu-school">Kentucky State University</div>
-        <div class="edu-year">May 2021</div>
-      </div>
-      <div class="education-item">
-        <div class="edu-degree">BS Agriculture &amp; Natural Resources</div>
-        <div class="edu-school">Kentucky State University</div>
-        <div class="edu-year">May 2018</div>
-      </div>
+    <div class="slabel">Education</div>
+    <div class="edu-row">
+      <div><div class="edeg">M.S. Environmental Studies</div><div class="einst">Kentucky State University</div></div>
+      <div class="edates">2018 – 2021</div>
+    </div>
+    <div class="edu-row">
+      <div><div class="edeg">B.S. Agriculture, Food &amp; Environment</div><div class="einst">Kentucky State University &nbsp;·&nbsp; <span style="color:var(--text-3);font-weight:400;">Minor: Geospatial Technology</span></div></div>
+      <div class="edates">2014 – 2018</div>
     </div>
   </section>
 
-  <!-- CONTACT CTA -->
   <section id="contact">
-    <div class="container">
-      <hr class="section-rule">
-      <div class="contact-cta">
-        <div class="contact-cta-label">// Let's talk</div>
-        <div class="open-to">● Open to opportunities</div>
-        <h2>Get in touch</h2>
-        <div class="contact-cta-sub">Interested in geospatial engineering, GeoAI, cloud-native spatial infrastructure, or open-source collaboration? I'd like to hear from you.</div>
-        <div class="contact-links">
-          <a href="mailto:wchrislyona@gmail.com" class="btn-primary">Email me</a>
-          <a href="https://www.linkedin.com/in/williamclyons" class="btn-ghost" target="_blank">LinkedIn</a>
-          <a href="https://github.com/chrislyonsKY" class="btn-ghost" target="_blank">GitHub</a>
-        </div>
-      </div>
+    <div class="slabel">Contact</div>
+    <h2>Get in touch</h2>
+    <p style="max-width:480px;font-size:14px;margin-top:.5rem;">Open to conversations about geospatial engineering, GeoAI, cloud-native spatial infrastructure, ArcGIS Pro SDK development, or open-source collaboration.</p>
+    <div class="clinks">
+      <a href="mailto:wchrislyons@gmail.com" class="clink"><span class="clabel">Email</span><span class="cval">wchrislyons@gmail.com</span></a>
+      <a href="https://www.linkedin.com/in/williamclyons/" class="clink"><span class="clabel">LinkedIn</span><span class="cval">williamclyons</span></a>
+      <a href="https://github.com/chrislyonsKY" class="clink"><span class="clabel">GitHub</span><span class="cval">chrislyonsKY</span></a>
     </div>
   </section>
 
-  <footer>
-    <span>Chris Lyons · <a href="https://github.com/chrislyonsKY" style="color:var(--slate);text-decoration:none;">chrislyonsKY</a> · Frankfort, KY · © 2026</span>
-  </footer>
+</main>
 
+<footer>Chris Lyons &nbsp;·&nbsp; Frankfort, KY &nbsp;·&nbsp; © 2026</footer>
 </body>
 </html>
